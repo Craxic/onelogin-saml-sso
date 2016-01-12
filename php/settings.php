@@ -57,6 +57,12 @@ if (empty($requested_authncontext_values)) {
     }
 }
 
+function get_option_or_define($option_name) {
+    $option_value = get_option($option_name);
+    $define_prefix = "ONELOGIN_DEFINE_";
+    return defined($define_prefix . $option_value) ? constant($define_prefix . $option_value) : $option_value;
+}
+
 $settings = array (
 
     'strict' => $opt['strict'] == 'on'? true : false,
@@ -71,8 +77,8 @@ $settings = array (
             'url' => get_site_url().'/wp-login.php?saml_sls'
         ),
         'NameIDFormat' => $opt['NameIDFormat'],
-        'x509cert' => get_option('onelogin_saml_advanced_settings_sp_x509cert'),
-        'privateKey' => get_option('onelogin_saml_advanced_settings_sp_privatekey'),
+        'x509cert' => get_option_or_define('onelogin_saml_advanced_settings_sp_x509cert'),
+        'privateKey' => get_option_or_define('onelogin_saml_advanced_settings_sp_privatekey'),
     ),
 
     'idp' => array (
@@ -83,7 +89,7 @@ $settings = array (
         'singleLogoutService' => array (
             'url' => get_option('onelogin_saml_idp_slo'),
         ),
-        'x509cert' => get_option('onelogin_saml_idp_x509cert'),
+        'x509cert' => get_option_or_define('onelogin_saml_idp_x509cert'),
     ),
 
     'security' => array (
